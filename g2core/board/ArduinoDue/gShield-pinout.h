@@ -256,6 +256,7 @@ pin_number kADC12_PinNumber = -1;  // 162;
 pin_number kADC13_PinNumber = -1;  // Not physially pinned out
 pin_number kADC14_PinNumber = -1;  // Not physially pinned out
 
+pin_number atc_pinNumber = 162;
 
 // GRBL / gShield compatibility pins -- Due board ONLY
 
