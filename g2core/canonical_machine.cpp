@@ -109,6 +109,8 @@
 #include "util.h"
 #include "xio.h"            // for serial queue flush
 
+#include "user_pins.h"
+
 /***********************************************************************************
  **** STRUCTURE ALLOCATIONS ********************************************************
  ***********************************************************************************/
@@ -1585,6 +1587,8 @@ static void _exec_select_tool(float *value, bool *flag)
 
 stat_t cm_change_tool(const uint8_t tool_change)
 {
+    //cm_straight_traverse((const float) 200.2,AXIS_X);
+    atc_pin.write(1);
     float value[] = { (float)cm.gm.tool_select,0,0,0,0,0 };
     bool flags[]  = { 1,0,0,0,0,0 };
     mp_queue_command(_exec_change_tool, value, flags);
