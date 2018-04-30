@@ -1597,7 +1597,33 @@ stat_t cm_change_tool(const uint8_t tool_change)
 
 static void _exec_change_tool(float *value, bool *flag)
 {
-    cm.gm.tool = (uint8_t)value[0];
+    /*
+	Go to safe height.
+	Turn of all fans and cooling
+	Turn on TT fan
+	open the TT
+	If cm.gm.tool is zero then we don't have a tool so no tool return
+	Tool return{
+		go to cm.gm.tool coords
+		go down to tool_change_height
+		drop the tool
+		check if tool is returned (switch) 
+			(If Not: Stop program and wait for worker to confirm that it's ok to continue)
+		// Tool should be returned now		
+		Go to safe height
+	}
+	Go to cm.gm.tool_select coords
+	go to tool_change_height
+	grab tool
+	go to safe height
+	check if tool is out of TT
+		(If Not: Stop program and wait for worker to confirm that it's ok to continue)
+	// Tool should be changed now
+	Mesure tool height.
+	Move away for lid
+	close lid
+	*/
+	cm.gm.tool = (uint8_t)value[0];
 }
 
 /***********************************
