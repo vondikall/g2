@@ -109,8 +109,10 @@
 #include "util.h"
 #include "xio.h"            // for serial queue flush
 
-#include "user_pins.h"
 
+// Included during MBD1 project spring 2018
+#include "user_pins.h"
+#include "tt_setup.h"
 /***********************************************************************************
  **** STRUCTURE ALLOCATIONS ********************************************************
  ***********************************************************************************/
@@ -1597,32 +1599,36 @@ stat_t cm_change_tool(const uint8_t tool_change)
 
 static void _exec_change_tool(float *value, bool *flag)
 {
-    /*
-	Go to safe height.
-	Turn of all fans and cooling
-	Turn on TT fan
-	open the TT
-	If cm.gm.tool is zero then we don't have a tool so no tool return
-	Tool return{
-		go to cm.gm.tool coords
-		go down to tool_change_height
-		drop the tool
-		check if tool is returned (switch) 
-			(If Not: Stop program and wait for worker to confirm that it's ok to continue)
-		// Tool should be returned now		
-		Go to safe height
-	}
-	Go to cm.gm.tool_select coords
-	go to tool_change_height
-	grab tool
-	go to safe height
-	check if tool is out of TT
-		(If Not: Stop program and wait for worker to confirm that it's ok to continue)
-	// Tool should be changed now
-	Mesure tool height.
-	Move away for lid
-	close lid
-	*/
+									
+	/*aTool NewTool; aTool OldTool;
+	// MISSING EMPTY STATES
+	NewTool=theTable.tools[cm.gm.tool_select];
+	OldTool=theTable.tools[cm.gm.tool];*/							
+								/*Go to safe height.
+									Turn of all fans and cooling
+									Turn on TT fan
+									open the TT
+	if((int)cm.gm.tool!=0)			If cm.gm.tool is zero then we don't have a tool so no tool return
+									ToolReturn{
+									go to cm.gm.tool coords
+									go down to tool_change_height
+									drop the tool
+	if(!tt_is_in_table(OldTool)){	check if tool is returned (switch) 
+										(If Not: Stop program and wait for worker to confirm that it's ok to continue)
+									// Tool should be returned now		
+	}								Go to safe height
+									}
+									//Go to cm.gm.tool_select coords 
+									go to tool_change_height
+									grab tool
+									go to safe height
+									check if tool is out of TT
+									(If Not: Stop program and wait for worker to confirm that it's ok to continue)
+									// Tool should be changed now
+									Mesure tool height.
+									Move away from lid
+									close lid
+									*/
 	cm.gm.tool = (uint8_t)value[0];
 }
 
