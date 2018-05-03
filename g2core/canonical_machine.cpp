@@ -1590,7 +1590,6 @@ static void _exec_select_tool(float *value, bool *flag)
 stat_t cm_change_tool(const uint8_t tool_change)
 {
     //cm_straight_traverse((const float) 200.2,AXIS_X);
-    atc_pin.write(1);
     float value[] = { (float)cm.gm.tool_select,0,0,0,0,0 };
     bool flags[]  = { 1,0,0,0,0,0 };
     mp_queue_command(_exec_change_tool, value, flags);
@@ -1598,38 +1597,24 @@ stat_t cm_change_tool(const uint8_t tool_change)
 }
 
 static void _exec_change_tool(float *value, bool *flag)
-{
-									
-	/*aTool NewTool; aTool OldTool;
-	// MISSING EMPTY STATES
-	NewTool=theTable.tools[cm.gm.tool_select];
-	OldTool=theTable.tools[cm.gm.tool];*/							
-								/*Go to safe height.
-									Turn of all fans and cooling
-									Turn on TT fan
-									open the TT
-	if((int)cm.gm.tool!=0)			If cm.gm.tool is zero then we don't have a tool so no tool return
-									ToolReturn{
-									go to cm.gm.tool coords
-									go down to tool_change_height
-									drop the tool
-	if(!tt_is_in_table(OldTool)){	check if tool is returned (switch) 
-										(If Not: Stop program and wait for worker to confirm that it's ok to continue)
-									// Tool should be returned now		
-	}								Go to safe height
-									}
-									//Go to cm.gm.tool_select coords 
-									go to tool_change_height
-									grab tool
-									go to safe height
-									check if tool is out of TT
-									(If Not: Stop program and wait for worker to confirm that it's ok to continue)
-									// Tool should be changed now
-									Mesure tool height.
-									Move away from lid
-									close lid
-									*/
-	cm.gm.tool = (uint8_t)value[0];
+{/*							
+	aTool NewTool; aTool OldTool;
+	tt_stopEverything();
+	tt_goToHeight(SAFE_HEIGHT);		//Go to safe height.
+	tt_turnFan(true);				//Turn on TT fan
+	tt_openLid();					//open the TT	
+	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
+		OldTool=tt.tools[cm.gm.tool];	
+		tt_toolReturn(OldTool);
+	}		
+	if((int)cm.gm.tool_select!=0){ 
+		NewTool=tt.tools[cm.gm.tool_select];
+		tt_toolPickup(NewTool);
+	}
+	tt_goToHeight(SAFE_HEIGHT);
+	tt_closeLid();
+	tt_turnFan(false);
+	cm.gm.tool = (uint8_t)value[0];*/
 }
 
 /***********************************
