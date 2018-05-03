@@ -5,7 +5,7 @@
     <ProjectVersion>7.0</ProjectVersion>
     <ToolchainName>com.Atmel.ARMGCC.CPP</ToolchainName>
     <ProjectGuid>{44ea8fec-55d7-4149-8a78-a574fc26bf51}</ProjectGuid>
-    <avrdevice>ATSAM3X8C</avrdevice>
+    <avrdevice>ATSAM3X8E</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>CPP</Language>
@@ -22,11 +22,11 @@
     <eraseonlaunchrule>1</eraseonlaunchrule>
     <AsfVersion>3.5.0</AsfVersion>
     <avrtoolinterface>SWD</avrtoolinterface>
-    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
+    <avrtool>com.atmel.avrdbg.tool.samice</avrtool>
     <com_atmel_avrdbg_tool_samice>
       <ToolType>com.atmel.avrdbg.tool.samice</ToolType>
       <ToolName>J-Link</ToolName>
-      <ToolNumber>58003445</ToolNumber>
+      <ToolNumber>269301799</ToolNumber>
       <Channel>
         <host>127.0.0.1</host>
         <port>1063</port>
@@ -44,8 +44,9 @@
           <JtagDevicesAfter>0</JtagDevicesAfter>
           <JtagInstrBitsBefore>0</JtagInstrBitsBefore>
           <JtagInstrBitsAfter>0</JtagInstrBitsAfter>
-          <SwdClock>0</SwdClock>
+          <SwdClock>4000000</SwdClock>
         </InterfaceProperties>
+        <JlinkConfigFile>C:\Users\sephi\Documents\GitHub\g2\g2core\jlink.config</JlinkConfigFile>
       </ToolOptions>
     </com_atmel_avrdbg_tool_samice>
     <AsfFrameworkConfig>
@@ -56,7 +57,7 @@
         <documentation help="" />
         <offline-documentation help="" />
         <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.10.1" />
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.26.0" />
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
@@ -68,7 +69,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <SwdClock>10000000</SwdClock>
+          <SwdClock>0</SwdClock>
         </InterfaceProperties>
         <InterfaceName>SWD</InterfaceName>
       </ToolOptions>
@@ -100,9 +101,9 @@
       <HWProgramCounterSampling>True</HWProgramCounterSampling>
     </PercepioTrace>
     <preserveEEPROM>true</preserveEEPROM>
-    <avrtoolserialnumber>J41800030015</avrtoolserialnumber>
-    <avrdeviceexpectedsignature>0x284E0A60</avrdeviceexpectedsignature>
-    <avrtoolinterfaceclock>10000000</avrtoolinterfaceclock>
+    <avrtoolserialnumber>269301799</avrtoolserialnumber>
+    <avrdeviceexpectedsignature>0x285E0A60</avrdeviceexpectedsignature>
+    <avrtoolinterfaceclock>4000000</avrtoolinterfaceclock>
     <custom>
       <ToolOptions xmlns="">
         <InterfaceProperties>
@@ -117,6 +118,8 @@
     <UseGdbCustomPath>False</UseGdbCustomPath>
     <GdbCustomPath>
     </GdbCustomPath>
+    <ResetRule>0</ResetRule>
+    <EraseKey />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'gShield' ">
     <ToolchainSettings>
@@ -179,7 +182,7 @@
     </ToolchainSettings>
     <UsesExternalMakeFile>True</UsesExternalMakeFile>
     <BuildTarget>BOARD=gShield CONFIG=ShapeokoDualY COLOR=0 VERBOSE=1</BuildTarget>
-    <CleanTarget>clean BOARD=gShield CONFIG=ShapeokoDualY </CleanTarget>
+    <CleanTarget>clean BOARD=gShield CONFIG=ShapeokoDualY</CleanTarget>
     <ExternalMakeFilePath>Makefile</ExternalMakeFilePath>
     <OutputDirectory />
   </PropertyGroup>
@@ -1734,6 +1737,9 @@
     <Compile Include="settings\settings_Printrbot_Simple_1608.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="settings\settings_shapeoko2dualY.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="settings\settings_ultimaker.h">
       <SubType>compile</SubType>
     </Compile>
@@ -1909,6 +1915,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="text_parser.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="User_functions.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="user_pins.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="util.cpp">

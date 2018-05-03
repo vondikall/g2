@@ -11,4 +11,4 @@ log_output openocd.log
 #source [find interface/cmsis-dap.cfg]
 
 # For a JLink (or compatible) device:
-#source [find interface/jlink.cfg]
+source [find interface/jlink.cfg]

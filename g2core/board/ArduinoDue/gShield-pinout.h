@@ -162,35 +162,36 @@ pin_number kSocket3_Microstep_1PinNumber    = 30;
 pin_number kSocket3_Microstep_2PinNumber    = -1;
 pin_number kSocket3_VrefPinNumber           = -1;  // 63; //PWMTimer<2>
 
-pin_number kSocket4_SPISlaveSelectPinNumber = 77;
+pin_number kSocket4_SPISlaveSelectPinNumber = -1;
 pin_number kSocket4_InterruptPinNumber      = -1;
 pin_number kSocket4_StepPinNumber           = 31;
 pin_number kSocket4_DirPinNumber            = 32;
 pin_number kSocket4_EnablePinNumber         = 33;
-pin_number kSocket4_Microstep_0PinNumber    = 35;
-pin_number kSocket4_Microstep_1PinNumber    = 36;
+pin_number kSocket4_Microstep_0PinNumber    = -1;
+pin_number kSocket4_Microstep_1PinNumber    = -1;
 pin_number kSocket4_Microstep_2PinNumber    = -1;
 pin_number kSocket4_VrefPinNumber           = -1;  // 64; //PWMTimer<3>
 
-pin_number kSocket5_SPISlaveSelectPinNumber = 78;
+pin_number kSocket5_SPISlaveSelectPinNumber = -1;
 pin_number kSocket5_InterruptPinNumber      = -1;
-pin_number kSocket5_StepPinNumber           = 37;
-pin_number kSocket5_DirPinNumber            = 38;
-pin_number kSocket5_EnablePinNumber         = 39;
-pin_number kSocket5_Microstep_0PinNumber    = 40;
-pin_number kSocket5_Microstep_1PinNumber    = 41;
+pin_number kSocket5_StepPinNumber           = -1;
+pin_number kSocket5_DirPinNumber            = -1;
+pin_number kSocket5_EnablePinNumber         = -1;
+pin_number kSocket5_Microstep_0PinNumber    = -1;
+pin_number kSocket5_Microstep_1PinNumber    = -1;
 pin_number kSocket5_Microstep_2PinNumber    = -1;
 pin_number kSocket5_VrefPinNumber           = -1;  // 66; //PWMTimer<3>
 
-pin_number kSocket6_SPISlaveSelectPinNumber = 50;
+pin_number kSocket6_SPISlaveSelectPinNumber = -1;
 pin_number kSocket6_InterruptPinNumber      = -1;
-pin_number kSocket6_StepPinNumber           = 42;
-pin_number kSocket6_DirPinNumber            = 43;
-pin_number kSocket6_EnablePinNumber         = 44;
+pin_number kSocket6_StepPinNumber           = -1;
+pin_number kSocket6_DirPinNumber            = -1;
+pin_number kSocket6_EnablePinNumber         = -1;
 pin_number kSocket6_Microstep_0PinNumber    = -1;  // 45;
-pin_number kSocket6_Microstep_1PinNumber    = 46;
+pin_number kSocket6_Microstep_1PinNumber    = -1;
 pin_number kSocket6_Microstep_2PinNumber    = -1;
 pin_number kSocket6_VrefPinNumber           = -1;  // 67; //PWMTimer<0>
+
 
 
 pin_number kInput1_PinNumber = 14;
@@ -205,7 +206,7 @@ pin_number kInput8_PinNumber  = 59;
 pin_number kInput9_PinNumber  = 60;
 pin_number kInput10_PinNumber = 61;
 pin_number kInput11_PinNumber = 65;
-pin_number kInput12_PinNumber = 51;
+pin_number kInput12_PinNumber = -1;
 
 pin_number kSpindle_EnablePinNumber = 12;
 pin_number kSpindle_DirPinNumber    = -1;  // 13;
@@ -256,7 +257,19 @@ pin_number kADC12_PinNumber = -1;  // 162;
 pin_number kADC13_PinNumber = -1;  // Not physially pinned out
 pin_number kADC14_PinNumber = -1;  // Not physially pinned out
 
-pin_number atc_pinNumber = 162;
+//user pin defines
+pin_number atc_pinNumber = 51;
+pin_number lid_off_pinNumber=50;
+pin_number tool4_pinNumber=42;
+pin_number aux_pinNumber=43;
+pin_number fan_pinNumber=44;
+pin_number tool5_pinNumber=46;
+pin_number cleanair_pinNumber=37;
+pin_number tool6_pinNumber=39;
+pin_number lid_on_pinNumber=35;
+pin_number tool1_pinNumber=60;
+pin_number tool2_pinNumber=61;
+pin_number tool3_pinNumber=65;
 
 // GRBL / gShield compatibility pins -- Due board ONLY
 

@@ -89,7 +89,7 @@
 #define M1_MOTOR_MAP                AXIS_X                  // 1ma
 #define M1_STEP_ANGLE               0.09                     // 1sa
 #define M1_TRAVEL_PER_REV           4                   // 1tr
-#define M1_MICROSTEPS               0                       // 1mi  1,2,4,8,16,32
+#define M1_MICROSTEPS               1                      // 1mi  1,2,4,8,16,32
 #define M1_POLARITY                 0                       // 1po  0=normal, 1=reversed
 #define M1_POWER_MODE               MOTOR_POWER_MODE        // 1pm  TRUE=low power idle enabled
 #define M1_POWER_LEVEL              0.500
@@ -97,7 +97,7 @@
 #define M2_MOTOR_MAP                AXIS_Y
 #define M2_STEP_ANGLE               0.09
 #define M2_TRAVEL_PER_REV           4
-#define M2_MICROSTEPS               0
+#define M2_MICROSTEPS               1
 #define M2_POLARITY                 0
 #define M2_POWER_MODE               MOTOR_POWER_MODE
 #define M2_POWER_LEVEL              0.500
@@ -105,7 +105,7 @@
 #define M3_MOTOR_MAP                AXIS_Z
 #define M3_STEP_ANGLE               0.09
 #define M3_TRAVEL_PER_REV           2
-#define M3_MICROSTEPS               0
+#define M3_MICROSTEPS               1
 #define M3_POLARITY                 0
 #define M3_POWER_MODE               MOTOR_POWER_MODE
 #define M3_POWER_LEVEL              0.750
@@ -146,11 +146,11 @@
 #define Z_VELOCITY_MAX              1200
 #define Z_FEEDRATE_MAX              Z_VELOCITY_MAX
 #define Z_TRAVEL_MAX                0
-#define Z_TRAVEL_MIN                -95
+#define Z_TRAVEL_MIN                -100
 #define Z_JERK_MAX                  500
 #define Z_JERK_HIGH_SPEED           1000
-#define Z_HOMING_INPUT              6
-#define Z_HOMING_DIRECTION          1
+#define Z_HOMING_INPUT              5
+#define Z_HOMING_DIRECTION          0
 #define Z_SEARCH_VELOCITY           (Z_VELOCITY_MAX * 0.66666)
 #define Z_LATCH_VELOCITY            25
 #define Z_LATCH_BACKOFF             4
@@ -193,15 +193,15 @@
 #define DI3_FUNCTION                INPUT_FUNCTION_LIMIT
 
 // Ymax
-#define DI4_MODE                    NORMALLY_CLOSED
+#define DI4_MODE                    NORMALLY_OPEN
 //#define DI4_ACTION                  INPUT_ACTION_STOP
 #define DI4_ACTION                  INPUT_ACTION_NONE
-#define DI4_FUNCTION                INPUT_FUNCTION_LIMIT
+#define DI4_FUNCTION                INPUT_FUNCTION_PROBE
 
 // Zmin
-#define DI5_MODE                    NORMALLY_CLOSED   // Z probe
+#define DI5_MODE                    NORMALLY_OPEN   // Z probe
 #define DI5_ACTION                  INPUT_ACTION_NONE
-#define DI5_FUNCTION                INPUT_FUNCTION_NONE
+#define DI5_FUNCTION                INPUT_FUNCTION_PROBE
 
 // Zmax
 #define DI6_MODE                    NORMALLY_CLOSED
