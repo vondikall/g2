@@ -109,8 +109,10 @@
 #include "util.h"
 #include "xio.h"            // for serial queue flush
 
-#include "user_pins.h"
 
+// Included during MBD1 project spring 2018
+#include "user_pins.h"
+#include "tt_setup.h"
 /***********************************************************************************
  **** STRUCTURE ALLOCATIONS ********************************************************
  ***********************************************************************************/
@@ -1588,7 +1590,6 @@ static void _exec_select_tool(float *value, bool *flag)
 stat_t cm_change_tool(const uint8_t tool_change)
 {
     //cm_straight_traverse((const float) 200.2,AXIS_X);
-    atc_pin.write(1);
     float value[] = { (float)cm.gm.tool_select,0,0,0,0,0 };
     bool flags[]  = { 1,0,0,0,0,0 };
     mp_queue_command(_exec_change_tool, value, flags);
@@ -1596,8 +1597,24 @@ stat_t cm_change_tool(const uint8_t tool_change)
 }
 
 static void _exec_change_tool(float *value, bool *flag)
-{
-    cm.gm.tool = (uint8_t)value[0];
+{/*							
+	aTool NewTool; aTool OldTool;
+	tt_stopEverything();
+	tt_goToHeight(SAFE_HEIGHT);		//Go to safe height.
+	tt_turnFan(true);				//Turn on TT fan
+	tt_openLid();					//open the TT	
+	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
+		OldTool=tt.tools[cm.gm.tool];	
+		tt_toolReturn(OldTool);
+	}		
+	if((int)cm.gm.tool_select!=0){ 
+		NewTool=tt.tools[cm.gm.tool_select];
+		tt_toolPickup(NewTool);
+	}
+	tt_goToHeight(SAFE_HEIGHT);
+	tt_closeLid();
+	tt_turnFan(false);
+	cm.gm.tool = (uint8_t)value[0];*/
 }
 
 /***********************************
