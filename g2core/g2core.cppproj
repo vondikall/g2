@@ -1917,6 +1917,12 @@
     <Compile Include="text_parser.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="tt_setup.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="tt_setup.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="User_functions.cpp">
       <SubType>compile</SubType>
     </Compile>
