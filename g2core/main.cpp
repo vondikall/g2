@@ -39,6 +39,7 @@
 
 #include "util.h"
 #include "MotateUniqueID.h"
+#include "tt_setup.h"
 
 /***** NOTE: *****
 
@@ -108,6 +109,7 @@ void application_init_machine(void)
     pwm_init();                     // pulse width modulation drivers
     planner_init();                 // motion planning subsystem
     canonical_machine_init();       // canonical machine
+	tool_holder_init();				// tool holder
 }
 
 void application_init_startup(void)

@@ -9,31 +9,66 @@
 #include "canonical_machine.h"
 #include "settings.h"
 
-#ifndef TT_SETUP_H_
-#define TT_SETUP_H_
+#ifndef TH_SETUP_H_
+#define TH_SETUP_H_
 
-#define SAFE_HIGHT //This probably exists somewhere in settings but i cant currently find it.
+// Needs fixing. is in placeholder mode.
+#define SAFE_HEIGHT		((float)1) //This probably exists somewhere in settings but i cant currently find it.
+#define	TH_HEIGHT		((float)1) // travel height above tt. Should be safe travel height if the lid is closed
+#define TH_POSITION1_X	((float)1)
+#define TH_POSITION1_Y	((float)1)
+#define TH_POSITION2_X	((float)1)
+#define TH_POSITION2_Y	((float)1)
 
+
+typedef enum{
+	CLOSED = 0,
+	OPEN
+}thlidState;
+
+typedef enum{
+	IN_SPINDLE = 0,
+	IN_HOLDER
+}toolState;
 
 typedef struct aTool {
 	float position[AXES] = { 0,0,0,0,0,0 };
 	uint8_t number = 0;
-	bool inTable = true;
-	// not sure what type the ofset is
+	toolState inHolder;
+	// not sure what type the offset is
 	// want to add a message with tool description if called
-} aTool;
+}aTool;
 
-typedef struct ToolTable {
+typedef struct ToolHolder {
 	aTool tools[TOOLS];
-	// lidstatus        
-} ToolTable;
+	thlidState lid_state = CLOSED; // polarity not picked
+	float position1[AXES] = { TH_POSITION1_X,TH_POSITION1_Y,0,0,0,0 };
+	float position2[AXES] = { TH_POSITION2_X,TH_POSITION2_Y,0,0,0,0 };
+} ToolHolder;
 
-void tt_make_tools(void);
-void tt_make_table(void);
-bool tt_is_in_table(aTool T);
-//void tt_set_tool_offest(aTool T);
-//void tt_openLid(void);
-//bool tt_is_lid_open(void);
+
+
+/***********************************************************************************
+ **** Functions ********************************************************************
+ ***********************************************************************************/
+// Make functions. Tools and table are defined by user in tt_setup.cpp
+void th_make_tools(void);
+void th_make_holder(void);
+void tool_holder_init(void);
+
+// Get and set functions
+toolState th_get_tool_state(aTool T);
+thlidState th_get_lid_state(void);
+void th_set_tool_offest(aTool T);
+void th_set_lid_state(thlidState th_lid_state);
+
+// Tool return and Tool pickup functions
+stat_t th_primeTable(void);
+void th_toolReturn(aTool theTool);
+void th_toolPickup(aTool theTool);
+
+// Placeholder and helper functions
+stat_t th_goToHeight(float height);
 
 
 

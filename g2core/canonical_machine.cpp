@@ -1592,28 +1592,26 @@ stat_t cm_change_tool(const uint8_t tool_change)
     //cm_straight_traverse((const float) 200.2,AXIS_X);
     float value[] = { (float)cm.gm.tool_select,0,0,0,0,0 };
     bool flags[]  = { 1,0,0,0,0,0 };
-    mp_queue_command(_exec_change_tool, value, flags);
+    mp_queue_command(_exec_change_tool, &value[0], &flags[0]);
     return (STAT_OK);
 }
 
 static void _exec_change_tool(float *value, bool *flag)
-{/*							
+{/*						
 	aTool NewTool; aTool OldTool;
-	tt_stopEverything();
-	tt_goToHeight(SAFE_HEIGHT);		//Go to safe height.
-	tt_turnFan(true);				//Turn on TT fan
-	tt_openLid();					//open the TT	
+	stat_t status;
+	status=th_primeTable();
+	th_set_lid_state(OPEN);
 	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
-		OldTool=tt.tools[cm.gm.tool];	
-		tt_toolReturn(OldTool);
+		OldTool=th.tools[cm.gm.tool];	
+		th_toolReturn(OldTool);
 	}		
 	if((int)cm.gm.tool_select!=0){ 
-		NewTool=tt.tools[cm.gm.tool_select];
-		tt_toolPickup(NewTool);
+		NewTool=th.tools[cm.gm.tool_select];
+		th_toolPickup(NewTool);
 	}
-	tt_goToHeight(SAFE_HEIGHT);
-	tt_closeLid();
-	tt_turnFan(false);
+	status = th_goToHeight(SAFE_HEIGHT); //dont forget to change back
+	th_set_lid_state(CLOSED);
 	cm.gm.tool = (uint8_t)value[0];*/
 }
 
