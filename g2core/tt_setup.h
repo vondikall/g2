@@ -19,6 +19,8 @@
 #define TH_POSITION1_Y	((float)1)
 #define TH_POSITION2_X	((float)1)
 #define TH_POSITION2_Y	((float)1)
+#define HOLD			true
+#define RELEASE			false
 
 
 typedef enum{
@@ -30,6 +32,7 @@ typedef enum{
 	IN_SPINDLE = 0,
 	IN_HOLDER
 }toolState;
+
 
 typedef struct aTool {
 	float position[AXES] = { 0,0,0,0,0,0 };
@@ -44,9 +47,8 @@ typedef struct ToolHolder {
 	thlidState lid_state = CLOSED; // polarity not picked
 	float position1[AXES] = { TH_POSITION1_X,TH_POSITION1_Y,0,0,0,0 };
 	float position2[AXES] = { TH_POSITION2_X,TH_POSITION2_Y,0,0,0,0 };
+	float travelHeight[AXES] = {TH_HEIGHT,0,0,0,0,0};
 } ToolHolder;
-
-
 
 /***********************************************************************************
  **** Functions ********************************************************************
@@ -60,7 +62,13 @@ void tool_holder_init(void);
 toolState th_get_tool_state(aTool T);
 thlidState th_get_lid_state(void);
 void th_set_tool_offest(aTool T);
+
+void th_set_valve_state(bool state);
+void _exec_set_valve_state(float target[], bool flags[]);
 void th_set_lid_state(thlidState th_lid_state);
+void _exec_set_lid_state(float target[], bool flags[]);
+void set_air_flow(bool state);
+void _exec_set_air_flow(float target[], bool flags[]);
 
 // Tool return and Tool pickup functions
 stat_t th_primeTable(void);
@@ -69,7 +77,5 @@ void th_toolPickup(aTool theTool);
 
 // Placeholder and helper functions
 stat_t th_goToHeight(float height);
-
-
 
 #endif /* TT_SETUP_H_ */

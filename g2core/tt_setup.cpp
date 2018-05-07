@@ -16,6 +16,7 @@ C:\Users\Vondikall\Documents\GitHub\g2\g2core\canonical_machine.h (Line 410 for 
 #include "spindle.h"
 #include "coolant.h"
 #include "planner.h"
+#include "user_pins.h"
 
 aTool T1; aTool T2; aTool T3; aTool T4; aTool T5;
 void th_make_tools(void){
@@ -50,13 +51,13 @@ void th_make_tools(void){
 	T5.inHolder = IN_HOLDER;
 }
 
-ToolHolder th;
+
 void th_make_holder(void){
-	th.tools[0]=T1;
-	th.tools[1]=T2;
-	th.tools[2]=T3;
-	th.tools[3]=T4;
-	th.tools[4]=T5;
+	cm.th.tools[0]=T1;
+	cm.th.tools[1]=T2;
+	cm.th.tools[2]=T3;
+	cm.th.tools[3]=T4;
+	cm.th.tools[4]=T5;
 }
 
 void tool_holder_init(void){
@@ -70,39 +71,66 @@ void tool_holder_init(void){
 
 // Get functions
 toolState th_get_tool_state(aTool T){ return T.inHolder; }
-thlidState th_get_lid_state(void){ return th.lid_state; }
+thlidState th_get_lid_state(void){ return cm.th.lid_state; }
 
-// Set functions //NOTE:missing physical pin change
-// need to change both pins when changing state
-//void tt_set_tool_offest(aTool T){} // I'm missing offset definition
-void th_set_lid_state(const thlidState th_lid_state){
-	th.lid_state=th_lid_state;
+void th_set_valve_state(bool state){
+	bool flags[] = {state,0,0,0,0,0};
+	float value[] = {0,0,0,0,0,0};
+	mp_queue_command(_exec_set_valve_state,&value[0],&flags[0]);
+}
+void _exec_set_valve_state(float target[], bool flags[]){
+	atc_pin=flags[0];
+}
+
+void th_set_lid_state(thlidState th_lid_state){
+	cm.th.lid_state=th_lid_state;
+	bool flags[] = {cm.th.lid_state,0,0,0,0,0};
+	float value[] = {0,0,0,0,0,0};
+	mp_queue_command(_exec_set_lid_state,&value[0],&flags[0]);
+}
+void _exec_set_lid_state(float target[], bool flags[]){
+	lid_on_pin = flags[0];
+	lid_off_pin = !flags[0];
+}
+
+
+void set_air_flow(bool state){
+	bool flags[] = {state,0,0,0,0,0};
+	float value[] = {0,0,0,0,0,0};
+	mp_queue_command(_exec_set_air_flow,&value[0],&flags[0]);
+}
+void _exec_set_air_flow(float value[], bool flags[]){
+	cleanair_pin=flags[0];
 }
 
 // General functions
 stat_t th_primeTable(void){
 	bool flagsXY[] = {1,1,0,0,0,0};
-	stat_t NSWYAOSB = STAT_OK; //NotSureWhatYouAreOrShouldBe
+	bool flagsZ[] = {0,0,1,0,0,0};
+	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};
+	stat_t status;
+	
 	cm_spindle_off_immediate();
 	cm_coolant_off_immediate();
-	// spindle fan thing
-	NSWYAOSB = th_goToHeight(SAFE_HEIGHT);
-	NSWYAOSB = cm_straight_traverse(&th.position1[0], &flagsXY[0]);
-	NSWYAOSB = th_goToHeight(TH_HEIGHT);
-	// blow clean air
-	NSWYAOSB = cm_straight_traverse(&th.position2[0], &flagsXY[0]);
-	// clean air of
-	NSWYAOSB = th_goToHeight(SAFE_HEIGHT);
+	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
+	status = cm_straight_traverse(&cm.th.position1[0], &flagsXY[0]);
+	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
+	set_air_flow(true);
+	status = cm_straight_traverse(&cm.th.position2[0], &flagsXY[0]);
+	set_air_flow(false);
+	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
+	th_set_lid_state(OPEN);
 	return STAT_OK;
 }
 void th_toolReturn(aTool theTool){
 	bool flagsXY[] = {1,1,0,0,0,0};
 	bool flagsZ[] = {0,0,1,0,0,0};
-	stat_t NSWYAOSB = STAT_OK; //NotSureWhatYouAreOrShouldBe
-	NSWYAOSB = cm_straight_traverse(theTool.position, &flagsXY[0]);
-	NSWYAOSB = cm_straight_traverse(theTool.position, &flagsZ[0]);
-	// valve command
-	NSWYAOSB=th_goToHeight(TH_HEIGHT);
+	stat_t status;
+			
+	status = cm_straight_traverse(&theTool.position[0], &flagsXY[0]);
+	status = cm_straight_traverse(&theTool.position[0], &flagsZ[0]);
+	th_set_valve_state((bool)RELEASE);
+	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
 	// check switch feedback
 	theTool.inHolder=IN_HOLDER;
 }
@@ -110,13 +138,12 @@ void th_toolReturn(aTool theTool){
 void th_toolPickup(aTool theTool){
 	bool flagsXY[] = {1,1,0,0,0,0};
 	bool flagsZ[] = {0,0,1,0,0,0};
-	bool* flagsXY_ptr =flagsXY;
-	bool* flagsZ_ptr =flagsZ;
-	stat_t NSWYAOSB = STAT_OK; //NotSureWhatYouAreOrShouldBe
-	NSWYAOSB = cm_straight_traverse(theTool.position, flagsXY_ptr);
-	NSWYAOSB = cm_straight_traverse(theTool.position, flagsZ_ptr);
-	// valve command
-	NSWYAOSB = th_goToHeight(TH_HEIGHT);
+	stat_t status;
+	
+	status = cm_straight_traverse(&theTool.position[0], &flagsXY[0]);
+	status = cm_straight_traverse(&theTool.position[0], &flagsZ[0]);
+	th_set_valve_state((bool)HOLD);
+	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
 	// check switch feedback
 	theTool.inHolder=IN_SPINDLE;
 }
@@ -124,6 +151,8 @@ void th_toolPickup(aTool theTool){
 stat_t th_goToHeight(float height){
 	bool flags[]  = { 0,0,1,0,0,0 };
 	float value[] = {0,0,height,0,0,0};
-	return(cm_straight_traverse(&value[0], &flags[0]));
+	stat_t status;
+	status = cm_straight_traverse(&value[0],&flags[0]);
+	return(STAT_OK);
 }
 

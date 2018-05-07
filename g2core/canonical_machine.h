@@ -35,6 +35,7 @@
 #include "config.h"
 #include "hardware.h"                       // Note: hardware.h is specific to the hardware target selected
 #include "settings.h"
+#include "tt_setup.h"
 
 #if MARLIN_COMPAT_ENABLED == true
 #include "marlin_compatibility.h"           // import Marlin definitions and enums
@@ -454,6 +455,9 @@ typedef struct cmSingleton {                // struct to manage cm globals and c
     GCodeState_t *am;                       // active Gcode model is maintained by state management
     GCodeState_t  gm;                       // core gcode model state
     GCodeStateX_t gmx;                      // extended gcode model state
+	
+  /**** Tool holder ****/
+	ToolHolder th;	
 
     magic_t magic_end;
 } cmSingleton_t;

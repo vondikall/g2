@@ -1597,22 +1597,23 @@ stat_t cm_change_tool(const uint8_t tool_change)
 }
 
 static void _exec_change_tool(float *value, bool *flag)
-{/*						
+{					
 	aTool NewTool; aTool OldTool;
 	stat_t status;
 	status=th_primeTable();
-	th_set_lid_state(OPEN);
 	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
-		OldTool=th.tools[cm.gm.tool];	
+		OldTool=cm.th.tools[cm.gm.tool];	
 		th_toolReturn(OldTool);
 	}		
 	if((int)cm.gm.tool_select!=0){ 
-		NewTool=th.tools[cm.gm.tool_select];
+		NewTool=cm.th.tools[cm.gm.tool_select];
 		th_toolPickup(NewTool);
 	}
-	status = th_goToHeight(SAFE_HEIGHT); //dont forget to change back
+	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};
+	bool flagsZ[] = {0,0,1,0,0,0};
+	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
 	th_set_lid_state(CLOSED);
-	cm.gm.tool = (uint8_t)value[0];*/
+	cm.gm.tool = (uint8_t)value[0];
 }
 
 /***********************************
