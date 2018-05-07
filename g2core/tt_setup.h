@@ -24,6 +24,12 @@
 
 
 typedef enum{
+	ALL_IN = 0,
+	ONE_MISSING,
+	INVALID_STATUS
+}thtoolPinStatus;
+
+typedef enum{
 	CLOSED = 0,
 	OPEN
 }thlidState;
@@ -44,6 +50,8 @@ typedef struct aTool {
 
 typedef struct ToolHolder {
 	aTool tools[TOOLS];
+	bool toolPins[TOOLS];
+	thtoolPinStatus toolPins_status = ALL_IN;
 	thlidState lid_state = CLOSED; // polarity not picked
 	float position1[AXES] = { TH_POSITION1_X,TH_POSITION1_Y,0,0,0,0 };
 	float position2[AXES] = { TH_POSITION2_X,TH_POSITION2_Y,0,0,0,0 };
@@ -74,5 +82,6 @@ void _exec_set_air_flow(float target[], bool flags[]);
 stat_t th_primeTable(void);
 stat_t th_toolReturn(aTool theTool);
 stat_t th_toolPickup(aTool theTool);
+stat_t th_toolPinsQuiry(thtoolPinStatus quiry);
 
 #endif /* TT_SETUP_H_ */

@@ -58,6 +58,11 @@ void th_make_holder(void){
 	cm.th.tools[2]=T3;
 	cm.th.tools[3]=T4;
 	cm.th.tools[4]=T5;
+	cm.th.toolPins[0]=tool1_pin;
+	cm.th.toolPins[1]=tool2_pin;
+	cm.th.toolPins[2]=tool3_pin;
+	cm.th.toolPins[3]=tool4_pin;
+	cm.th.toolPins[4]=tool5_pin;
 }
 
 void tool_holder_init(void){
@@ -132,7 +137,7 @@ stat_t th_toolReturn(aTool theTool){
 	ritorno(cm_straight_traverse(&theTool.position[0], &flagsZ[0]));
 	ritorno(th_set_valve_state((bool)RELEASE));
 	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]));
-	// check switch feedback
+	ritorno(th_toolPinsQuiry(ALL_IN));
 	theTool.inHolder=IN_HOLDER;
 	return STAT_OK;
 }
@@ -145,15 +150,19 @@ stat_t th_toolPickup(aTool theTool){
 	ritorno(cm_straight_traverse(&theTool.position[0], &flagsZ[0]));
 	ritorno(th_set_valve_state((bool)HOLD));
 	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]))
-	// check switch feedback
+	ritorno(th_toolPinsQuiry(ONE_MISSING));
 	theTool.inHolder=IN_SPINDLE;
 	return STAT_OK;
 }
 
-stat_t th_goToHeight(float height){
-	bool flags[]  = { 0,0,1,0,0,0 };
-	float value[] = {0,0,height,0,0,0};
-	ritorno(cm_straight_traverse(&value[0],&flags[0]));
-	return(STAT_OK);
+stat_t th_toolPinsQuiry(thtoolPinStatus quiry){
+	int i=0; int count=0;
+	while (i<TOOLS){
+		if (cm.th.toolPins[i]==IN_SPINDLE){ count++; }
+	}
+	if(count==0){cm.th.toolPins_status=ALL_IN;}
+	if(count==1){cm.th.toolPins_status=ONE_MISSING;}
+	else{ cm.th.toolPins_status=INVALID_STATUS; }
+	if(quiry==cm.th.toolPins_status){return STAT_OK;}
+	else{ return STAT_ERROR;}
 }
-
