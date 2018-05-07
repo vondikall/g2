@@ -1589,30 +1589,29 @@ static void _exec_select_tool(float *value, bool *flag)
 
 stat_t cm_change_tool(const uint8_t tool_change)
 {
-    //cm_straight_traverse((const float) 200.2,AXIS_X);
     float value[] = { (float)cm.gm.tool_select,0,0,0,0,0 };
     bool flags[]  = { 1,0,0,0,0,0 };
+		
+	ritorno(th_primeTable());
+	aTool NewTool; aTool OldTool;
+	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
+		OldTool=cm.th.tools[cm.gm.tool];
+		ritorno(th_toolReturn(OldTool));
+	}
+	if((int)cm.gm.tool_select!=0){
+		NewTool=cm.th.tools[cm.gm.tool_select];
+		ritorno(th_toolPickup(NewTool));
+	}
     mp_queue_command(_exec_change_tool, &value[0], &flags[0]);
+	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};
+	bool flagsZ[] = {0,0,1,0,0,0};
+	ritorno(cm_straight_traverse(&safe[0], &flagsZ[0]));
+	ritorno(th_set_lid_state(CLOSED));
     return (STAT_OK);
 }
 
 static void _exec_change_tool(float *value, bool *flag)
 {					
-	aTool NewTool; aTool OldTool;
-	stat_t status;
-	status=th_primeTable();
-	if((int)cm.gm.tool!=0){			//If cm.gm.tool is zero then we don't have a tool so no tool return
-		OldTool=cm.th.tools[cm.gm.tool];	
-		th_toolReturn(OldTool);
-	}		
-	if((int)cm.gm.tool_select!=0){ 
-		NewTool=cm.th.tools[cm.gm.tool_select];
-		th_toolPickup(NewTool);
-	}
-	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};
-	bool flagsZ[] = {0,0,1,0,0,0};
-	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
-	th_set_lid_state(CLOSED);
 	cm.gm.tool = (uint8_t)value[0];
 }
 

@@ -63,19 +63,16 @@ toolState th_get_tool_state(aTool T);
 thlidState th_get_lid_state(void);
 void th_set_tool_offest(aTool T);
 
-void th_set_valve_state(bool state);
+stat_t th_set_valve_state(bool state);
 void _exec_set_valve_state(float target[], bool flags[]);
-void th_set_lid_state(thlidState th_lid_state);
+stat_t th_set_lid_state(thlidState th_lid_state);
 void _exec_set_lid_state(float target[], bool flags[]);
-void set_air_flow(bool state);
+stat_t set_air_flow(bool state);
 void _exec_set_air_flow(float target[], bool flags[]);
 
 // Tool return and Tool pickup functions
 stat_t th_primeTable(void);
-void th_toolReturn(aTool theTool);
-void th_toolPickup(aTool theTool);
-
-// Placeholder and helper functions
-stat_t th_goToHeight(float height);
+stat_t th_toolReturn(aTool theTool);
+stat_t th_toolPickup(aTool theTool);
 
 #endif /* TT_SETUP_H_ */

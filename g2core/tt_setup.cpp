@@ -73,20 +73,22 @@ void tool_holder_init(void){
 toolState th_get_tool_state(aTool T){ return T.inHolder; }
 thlidState th_get_lid_state(void){ return cm.th.lid_state; }
 
-void th_set_valve_state(bool state){
+stat_t th_set_valve_state(bool state){
 	bool flags[] = {state,0,0,0,0,0};
 	float value[] = {0,0,0,0,0,0};
 	mp_queue_command(_exec_set_valve_state,&value[0],&flags[0]);
+	return STAT_OK;
 }
 void _exec_set_valve_state(float target[], bool flags[]){
 	atc_pin=flags[0];
 }
 
-void th_set_lid_state(thlidState th_lid_state){
+stat_t th_set_lid_state(thlidState th_lid_state){
 	cm.th.lid_state=th_lid_state;
 	bool flags[] = {cm.th.lid_state,0,0,0,0,0};
 	float value[] = {0,0,0,0,0,0};
 	mp_queue_command(_exec_set_lid_state,&value[0],&flags[0]);
+	return STAT_OK;
 }
 void _exec_set_lid_state(float target[], bool flags[]){
 	lid_on_pin = flags[0];
@@ -94,10 +96,11 @@ void _exec_set_lid_state(float target[], bool flags[]){
 }
 
 
-void set_air_flow(bool state){
+stat_t set_air_flow(bool state){
 	bool flags[] = {state,0,0,0,0,0};
 	float value[] = {0,0,0,0,0,0};
 	mp_queue_command(_exec_set_air_flow,&value[0],&flags[0]);
+	return STAT_OK;
 }
 void _exec_set_air_flow(float value[], bool flags[]){
 	cleanair_pin=flags[0];
@@ -108,51 +111,49 @@ stat_t th_primeTable(void){
 	bool flagsXY[] = {1,1,0,0,0,0};
 	bool flagsZ[] = {0,0,1,0,0,0};
 	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};
-	stat_t status;
-	
+			
 	cm_spindle_off_immediate();
 	cm_coolant_off_immediate();
-	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
-	status = cm_straight_traverse(&cm.th.position1[0], &flagsXY[0]);
-	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
-	set_air_flow(true);
-	status = cm_straight_traverse(&cm.th.position2[0], &flagsXY[0]);
-	set_air_flow(false);
-	status = cm_straight_traverse(&safe[0], &flagsZ[0]);
-	th_set_lid_state(OPEN);
+	ritorno(cm_straight_traverse(&safe[0], &flagsZ[0]));
+	ritorno(cm_straight_traverse(&cm.th.position1[0], &flagsXY[0]));
+	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]));
+	ritorno(set_air_flow(true));
+	ritorno(cm_straight_traverse(&cm.th.position2[0], &flagsXY[0]));
+	ritorno(set_air_flow(false));
+	ritorno(cm_straight_traverse(&safe[0], &flagsZ[0]));
+	ritorno(th_set_lid_state(OPEN));
 	return STAT_OK;
 }
-void th_toolReturn(aTool theTool){
+stat_t th_toolReturn(aTool theTool){
 	bool flagsXY[] = {1,1,0,0,0,0};
 	bool flagsZ[] = {0,0,1,0,0,0};
-	stat_t status;
 			
-	status = cm_straight_traverse(&theTool.position[0], &flagsXY[0]);
-	status = cm_straight_traverse(&theTool.position[0], &flagsZ[0]);
-	th_set_valve_state((bool)RELEASE);
-	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
+	ritorno(cm_straight_traverse(&theTool.position[0], &flagsXY[0]));
+	ritorno(cm_straight_traverse(&theTool.position[0], &flagsZ[0]));
+	ritorno(th_set_valve_state((bool)RELEASE));
+	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]));
 	// check switch feedback
 	theTool.inHolder=IN_HOLDER;
+	return STAT_OK;
 }
 
-void th_toolPickup(aTool theTool){
+stat_t th_toolPickup(aTool theTool){
 	bool flagsXY[] = {1,1,0,0,0,0};
 	bool flagsZ[] = {0,0,1,0,0,0};
-	stat_t status;
 	
-	status = cm_straight_traverse(&theTool.position[0], &flagsXY[0]);
-	status = cm_straight_traverse(&theTool.position[0], &flagsZ[0]);
-	th_set_valve_state((bool)HOLD);
-	status = cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]);
+	ritorno(cm_straight_traverse(&theTool.position[0], &flagsXY[0]));
+	ritorno(cm_straight_traverse(&theTool.position[0], &flagsZ[0]));
+	ritorno(th_set_valve_state((bool)HOLD));
+	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]))
 	// check switch feedback
 	theTool.inHolder=IN_SPINDLE;
+	return STAT_OK;
 }
 
 stat_t th_goToHeight(float height){
 	bool flags[]  = { 0,0,1,0,0,0 };
 	float value[] = {0,0,height,0,0,0};
-	stat_t status;
-	status = cm_straight_traverse(&value[0],&flags[0]);
+	ritorno(cm_straight_traverse(&value[0],&flags[0]));
 	return(STAT_OK);
 }
 
