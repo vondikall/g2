@@ -1601,6 +1601,7 @@ stat_t cm_change_tool(const uint8_t tool_change)
 	if((int)cm.gm.tool_select!=0){
 		NewTool=cm.th.tools[cm.gm.tool_select];
 		ritorno(th_toolPickup(NewTool));
+		//  Set tool hight here or in tt_setup.cpp line 154
 	}
     mp_queue_command(_exec_change_tool, &value[0], &flags[0]);
 	float safe[] = {0,0,SAFE_HEIGHT,0,0,0};

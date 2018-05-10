@@ -151,6 +151,7 @@ stat_t th_toolPickup(aTool theTool){
 	ritorno(th_set_valve_state((bool)HOLD));
 	ritorno(cm_straight_traverse(&cm.th.travelHeight[0], &flagsZ[0]))
 	ritorno(th_toolPinsQuiry(ONE_MISSING));
+	// Set tool hight here or in canonical_machine.cpp line 1604
 	theTool.inHolder=IN_SPINDLE;
 	return STAT_OK;
 }
