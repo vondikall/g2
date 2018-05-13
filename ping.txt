@@ -1,0 +1,12 @@
+Hiya,
+
+Just noticed you're adding tool changer code to g2. :)
+
+Is it for a specific model of tool changer (eg something
+people can buy?) or is it one current being created?
+
+Oh - Sorry for doing this via a PR.  Your GitHub info has
+no contact details, and your g2 repo has issue creation
+disabled. ;)
+
++ Justin
